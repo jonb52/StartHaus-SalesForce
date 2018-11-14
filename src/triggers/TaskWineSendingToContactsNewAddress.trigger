@@ -3,10 +3,13 @@
 
 trigger TaskWineSendingToContactsNewAddress on Contact (before update) {
 	
-	Integer i = 0; // Variable used to compair records in trigger.new vs trigger.old
+	// Variable used to compair records in trigger.new vs trigger.old
+	Integer i = 0; 
+	// List to hold all of the tasks created below to be bulk inserted later
 	List<Task> wineSendingTasks = new List<Task>();
 	
 	for (Contact con : Trigger.new){
+		// If statement to check if any field related to the contact's address changed.
 		if(   con.MailingCity != Trigger.old[i].MailingCity 
 		   || con.MailingCountry != Trigger.old[i].MailingCountry
 		   || con.MailingPostalCode != Trigger.old[i].MailingPostalCode
@@ -16,11 +19,17 @@ trigger TaskWineSendingToContactsNewAddress on Contact (before update) {
 		{
 			Task sendWineTask = new Task();
 
-			sendWineTask.OwnerId 	  = con.OwnerId; 	// Assigns the task to the contacts owner
-			sendWineTask.Status 	  = 'Not Started';	// Sets the status of the task
-			sendWineTask.Subject 	  = 'Send Wine to ' + con.FirstName + ' ' + con.LastName; // Sets the tasks subject
-			sendWineTask.WhoId 		  = con.Id;			// Sets the name on the task to the contact with the new address
-			sendWineTask.ActivityDate = Date.today().addDays(14); // Sets the due date to two weeks from the task create date
+			// Assigns the task to the contacts owner
+			sendWineTask.OwnerId 	  = con.OwnerId; 	
+			// Sets the status of the task
+			sendWineTask.Status 	  = 'Not Started';
+			// Sets the tasks subject
+			sendWineTask.Subject 	  = 'Send Wine to ' + con.FirstName + ' ' + con.LastName; 
+			// Sets the name on the task to the contact with the new address
+			sendWineTask.WhoId 		  = con.Id;		
+			// Sets the due date to two weeks from the task create date
+			sendWineTask.ActivityDate = Date.today().addDays(14); 
+			// Sets the description of the new task to the contacts name and their new address
 			sendWineTask.Description  = con.FirstName + ' ' + con.LastName + ' has moved. '
 										+ 'Send wine to their new address at:\n\n'
 										+ con.MailingStreet + '\n' 
@@ -28,10 +37,13 @@ trigger TaskWineSendingToContactsNewAddress on Contact (before update) {
 										+ con.MailingState + ' '
 										+ con.MailingPostalCode + '\n'
 										+ con.MailingCountry;
+			// Adds the task to the list to later be bulk inserted
 			wineSendingTasks.add(sendWineTask);
 		}
 
-		i++;				// Increments the counter variable 'i' to keep record compairisons consistant 
+		// Increments the counter variable 'i' to keep record compairisons consistant
+		i++;				 
 	}
-	insert wineSendingTasks; // Inserts any new tasks
+	// Inserts the new tasks
+	insert wineSendingTasks; 
 }
