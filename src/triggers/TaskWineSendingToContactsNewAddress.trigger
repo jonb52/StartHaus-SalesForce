@@ -1,5 +1,6 @@
-//		When the address of a contact changes, create a task for the account owner that provides 
-//		the new address and reminds them to send wine.
+//  #2
+//	When the address of a contact changes, create a task for the account owner that provides 
+//	the new address and reminds them to send wine.
 
 trigger TaskWineSendingToContactsNewAddress on Contact (before update) {
 	

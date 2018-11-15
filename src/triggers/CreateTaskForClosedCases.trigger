@@ -1,3 +1,8 @@
+// #5
+// If a case is closed, create a task for the related account owner telling them to follow up with 
+// the account. If there was a contact related to the case, include the name and contact information 
+// in the task.
+
 trigger CreateTaskForClosedCases on Case (before update) {
 
 	List<Task> taskToInsert = new List<Task>();

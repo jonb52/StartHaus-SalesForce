@@ -1,4 +1,6 @@
+// #1
 // Automatically create a Renewal Opp for closed won deals
+
 trigger CreateRenewal on Opportunity (before update, after insert) {
 
   // Create a list to store all renewal opps for bulk inserting
@@ -14,7 +16,7 @@ trigger CreateRenewal on Opportunity (before update, after insert) {
        renewal.Name        = opp.Name + ' Renewal';
        renewal.CloseDate   = opp.CloseDate.addYears(1); // Add a year
        renewal.StageName   = 'Open';
-       renewal.Type  	   = 'Renewal';
+       renewal.Type  	     = 'Renewal';
        renewal.OwnerId     = opp.OwnerId;
        renewals.add(renewal);
     }
